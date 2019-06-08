@@ -1,10 +1,10 @@
 package com.sda.patientportal.model;
 
-import org.hibernate.validator.constraints.Length;
-
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
+
 import java.util.List;
 
 @Entity
@@ -14,14 +14,15 @@ public class Patient {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Length(min = 3, max = 20, message = "patient.firstName.invalid")
+    @Size(min = 3, max = 20, message = "patient.firstName.invalid")
     private String firstName;
 
-    @Length(min = 3, max = 20, message = "patient.lastName.invalid")
+    @Size(min = 3, max = 20, message = "patient.lastName.invalid")
     private String lastName;
 
-    @Min(value = 1)
-    @Max(value = 100)
+
+    @Min(value=1, message="{age to low}")
+    @Max(value=100, message="{age to big}")
     private Integer age;
 
     @OneToMany(mappedBy = "sender")
@@ -30,9 +31,10 @@ public class Patient {
     protected Patient() {
     }
 
-    public Patient(String firstName, String lastName) {
+    public Patient(String firstName, String lastName, Integer age) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.age = age;
     }
 
     public String getFirstName() {
